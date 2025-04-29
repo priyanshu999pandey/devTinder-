@@ -1,16 +1,35 @@
 const express = require("express");
 
 const app = express();
+const User = require("./models.js/user")
+const {connectDB }= require("./config/database");
 
-app.use("/user",(req,res,next)=>{
-  console.log("1 handler");
-  // res.send(" response - 1")
-  next();
-},(req,res)=>{
-  console.log("2 handler");
-  res.send("response -2")
+
+app.post("/signup",async(req,res)=>{
+  const user = new User({
+    firstName:"priyanshu",
+    lastName:"pandey",
+    age:19,
+    gender:"male",
+    email:"priyanhsu@pandey",
+    password:"priyanhsu@123"
+  })
+
+  try{
+    await user.save();
+   res.send("user Added successsfully");
+  }catch(err){
+     res.status(400).send(" usern not added:"+err.message)
+  }
 })
 
-app.listen(3000,()=>{
+
+
+ connectDB().then(()=>{
+  console.log("databse connected successfully");
+  app.listen(7777,()=>{
     console.log("server started")
 });
+}).catch((err)=>{
+  console.error("databse not connected");
+})
