@@ -2,22 +2,13 @@ const express = require("express");
 
 const app = express();
 
-app.get("/user",(req,res)=>{
-  res.send({firstName:"priyanshu",
-    lastName:"pandey"
-  })
-})
-
-app.post("/user",(req,res)=>{
-  res.send("posted successfully!!");
-})
-
-app.delete("/user",(req,res)=>{
- res.send("delted successfulyy!")
-})
-
-app.use("/home",(req,res)=>{
-  res.send("home 99  page")
+app.use("/user",(req,res,next)=>{
+  console.log("1 handler");
+  // res.send(" response - 1")
+  next();
+},(req,res)=>{
+  console.log("2 handler");
+  res.send("response -2")
 })
 
 app.listen(3000,()=>{
