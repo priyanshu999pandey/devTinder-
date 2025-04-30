@@ -8,6 +8,7 @@ app.use(express.json())
 
 app.post("/signup",async(req,res)=>{
   const user = new User(req.body)
+  console.log(req.body)
 
   try{
     await user.save();
@@ -48,8 +49,27 @@ app.get("/feed",async(req,res)=>{
     res.status(400).send("something went wrong:"+err.message)
   }
 })
-
-
+//DELETE-USER_API
+app.delete("/user",async(req,res)=>{
+  const userId = req.body.userId;
+  await User.findByIdAndDelete(userId)
+  try{
+     res.send("user deleted successfully!!!!")
+  }catch(err){
+    res.status(400).send("user not delted:"+err.message)
+  }
+})
+//PATCH-USER_API
+app.patch("/user",async(req,res)=>{
+  const userId = req.body.userId;
+  const data = req.body;
+  try{
+      const userDeleted = await User.findByIdAndUpdate(userId,data,{returnDocument:"before", runValidators:true})
+      res.send("user updated successfully")
+  }catch(err){
+    res.status(400).send("user not updated :"+err.message)
+  }
+})
 
  connectDB().then(()=>{
   console.log("databse connected successfully");
